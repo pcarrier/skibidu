@@ -1,0 +1,4 @@
+/.direnv/
+/generated/
+/runs/*
+!/runs/golden/

@@ -1,0 +1,13 @@
+;; Reads data and prints results; arithmetic evaluation lives in the generated AST.
+(import (scheme base) (scheme eval) (scheme load) (scheme read)
+        (scheme write) (scheme process-context) (only (meta) mutable-environment))
+(let ((arguments (cdr (command-line))))
+  (unless (= 1 (length arguments))
+    (error "usage: chibi-scheme run-calc.scm CALC.scm < expressions.scm"))
+  (let ((scope (mutable-environment '(rename (only (meta) repl-import) (repl-import import)))))
+    (load (car arguments) scope)
+    (let ((calc (eval 'calc scope)))
+      (let loop ((expression (read)))
+        (unless (eof-object? expression)
+          (write (calc expression)) (newline)
+          (loop (read)))))))
